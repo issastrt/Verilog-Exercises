@@ -1,0 +1,60 @@
+module DIV(
+    input [7:0] DVD,
+    input [3:0] DVR,
+    input clk,
+    input res,
+    output reg [7:0] quotient
+    );
+    
+    reg[8:0] q1, r1;
+    reg[3:0] state;
+    reg[2:0] n;
+    
+    always @(posedge res or posedge clk)
+    if (res)
+        begin
+            q1 <= 8'b00000000;
+            r1 <= 8'b00000000;
+            state <= 4'b0000;
+            n <= 3'b000;
+        end
+    else
+        begin
+            case(state)
+            4'b0000: 
+            begin
+                q1[7:0] <= DVD;
+                r1[7:4] <= DVR;
+                state <= 4'b0001;
+                n <= 3'b111;
+            end
+            4'b0001: 
+            begin
+                if (n >= 3'b000)
+                begin
+                    state <= 4'b0010;
+                    if (q1[8:4] >= r1[8:4])
+                    begin
+                        q1 <= q1 - r1;
+                        quotient[n] <= 1'b1;                        
+                    end
+                    else
+                    begin
+                        quotient[n] <= 1'b0;
+                   end
+                end
+                else
+                    q1 <= q1;                        
+            end
+            4'b0010: 
+            begin
+                if (n > 3'b000)
+                begin
+                    q1 <= q1 << 1;
+                    n <= n - 3'b001;
+                    state <= 4'b0001;
+                end
+            end
+            endcase
+        end
+endmodule
