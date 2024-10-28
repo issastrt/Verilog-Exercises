@@ -1,0 +1,21 @@
+module multiplier(a, b, clk, res, prod);
+    input [3:0] a, b;
+    input clk, res;
+    output reg [7:0] prod;
+
+    reg [3:0] c;
+
+    always @(posedge clk or posedge res)
+    begin
+        if (res)
+            begin
+                prod <= 8'b00000000;
+                c <= 4'b0000;
+            end
+        else if (c < b)
+        begin
+            prod <= prod + a;
+            c <= c + 4'b0001;
+        end
+    end
+endmodule
