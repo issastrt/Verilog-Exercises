@@ -1,0 +1,21 @@
+module addrev(
+    input [3:0] A,
+    input [3:0] B,
+    output [3:0] SUM
+    );
+    
+    wire [3:0]j;
+    wire [3:0]k;
+    wire l;
+    
+    adder U1 (A,B,j); 
+    andgate U2 (j[3],j[2],l);
+    adder U3 (j,k,SUM);
+    assign k[3]=0;
+    assign k[2]=l;
+    assign k[1]=l;
+    assign k[0]=0;
+    
+endmodule
+
+
