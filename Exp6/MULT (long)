@@ -1,0 +1,86 @@
+module MULT(
+    input [3:0] a,
+    input [3:0] b,
+    input clk,
+    input res,
+    output [7:0] prod
+    );
+    
+    reg [8:0] p, q;
+    reg [3:0] state;
+    
+    always @ (posedge clk or posedge res)
+    begin 
+        if(res)
+            begin
+                p <= 9'b000000000;
+                q <= 9'b000000000;
+                state <= 4'b0000;
+            end
+        else
+            begin
+                case(state)
+                    4'b0000:
+                        begin
+                            p[7:4] <= a;
+                            state <= state + 4'b0001;
+                        end
+                    4'b0001:
+                        begin
+                            state <= state + 4'b0001;
+                            if(b[0]==1)
+                                q <= q + p;
+                                                    
+                        end
+                    4'b0010:
+                        begin
+                            q <= q >> 1;
+                            state <= state + 4'b0001;
+                        end
+                    4'b0011:
+                        begin
+                            state <= state + 4'b0001;
+                            if(b[1]==1)
+                                q <= q + p;
+                                                    
+                        end                    
+                    4'b0100:
+                        begin
+                            q <= q >> 1;
+                            state <= state + 4'b0001;
+                        end                    
+                    4'b0101:
+                        begin
+                            state <= state + 4'b0001;
+                            if(b[2]==1)
+                                q <= q + p;
+                                                    
+                        end                    
+                    4'b0110:
+                        begin
+                            q <= q >> 1;
+                            state <= state + 4'b0001;
+                        end                    
+                    4'b0111:
+                        begin
+                            state <= state + 4'b0001;
+                            if(b[3]==1)
+                                q <= q + p;
+                                                    
+                        end                     
+                    4'b1000:
+                        begin
+                            q <= q >> 1;
+                            state <= state + 4’b0001;
+                        end                        
+                    
+                    default: 
+                        state = state;
+                endcase    
+            end
+            
+    end
+
+assign prod = q[7:0];    
+
+endmodule
