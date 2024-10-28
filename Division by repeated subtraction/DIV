@@ -1,0 +1,50 @@
+module DIV(
+    input [5:0] DVD,
+    input [3:0] DVR,
+    input clk,
+    input res,
+    output reg [5:0] remainder,
+    output reg [5:0] quotient
+    );
+
+	reg c_reg;
+	
+always @(posedge res or posedge clk)
+
+begin
+	if(res)
+		begin
+			remainder <= 6'b000000;
+			quotient <= 6'b000000;
+			c_reg <= 1'b0;
+		end
+		
+	else
+		begin
+			case (c_reg)
+				1'b0: 
+					begin
+						remainder <= DVD;
+						quotient <= 6'b000000;
+						c_reg <= 1'b1;
+					end
+				1'b1: 
+					begin
+						remainder <= remainder - DVR;
+						quotient <= quotient + 6'b000001;
+						if(remainder < DVR)
+							begin
+								remainder <= remainder;
+								quotient <= quotient;
+							end
+					end
+				default: 
+					begin
+						remainder <= 6'b000000;
+						quotient <= 6'b000000;
+					end
+			endcase
+		end
+end
+
+endmodule
