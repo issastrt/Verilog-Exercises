@@ -1,0 +1,42 @@
+module MULT(
+    input [3:0] X,
+    input [2:0] Y,
+    output [6:0] ANS
+    );
+    
+    wire [11:0] z;
+    wire [3:0] a, b, d, e;
+    wire [4:0] c, f;
+    wire [6:0] ANS;
+    
+    anding U1 (X, Y, z[0], z[1], z[2], z[3], z[4], z[5], z[6], z[7], z[8], z[9], z[10], z[11]);
+    
+    adder U2 (a, b, c);
+    assign a[3] = z[7];
+    assign a[2] = z[6];
+    assign a[1] = z[5];
+    assign a[0] = z[4];
+    assign b[3] = 0;
+    assign b[2] = z[3];
+    assign b[1] = z[2];
+    assign b[0] = z[1];
+    
+    adder U3 (d, e, f);    
+    assign d[3] = z[11];
+    assign d[2] = z[10];
+    assign d[1] = z[9];
+    assign d[0] = z[8];
+    assign e[3] = c[4];
+    assign e[2] = c[3];
+    assign e[1] = c[2];
+    assign e[0] = c[1];
+    
+    assign ANS[6] = f[4];
+    assign ANS[5] = f[3];
+    assign ANS[4] = f[2];
+    assign ANS[3] = f[1];
+    assign ANS[2] = f[0];
+    assign ANS[1] = c[0];
+    assign ANS[0] = z[0];
+    
+endmodule
